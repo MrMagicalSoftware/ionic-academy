@@ -2,8 +2,8 @@
 
 Modulo 1: <br><br>
 [Creazione di un nuovo progetto di Ionic 7](#1)<br>
-Principali Componenti Ionic 7<br>
-Styling e personalizzazione<br>
+Principali Componenti Ionic 7 (#2)<br>
+Styling e personalizzazione(#3)<br>
 Routing e navigazione<br>
 Passaggio di parametri tra le “activity”<br>
 Integrazione con servizi<br>
@@ -46,6 +46,21 @@ _____________________________________
 
 ### 1
 # Creazione di un nuovo progetto di Ionic 7
+
+
+
+
+_________________________________________
+
+### 2
+#  Principali Componenti Ionic 7
+
+
+______________________________________
+
+### 3
+# Styling e personalizzazione
+
 
 
 
