@@ -1,7 +1,7 @@
 # ionic-academy
 
 Modulo 1: <br><br>
-[Creazione di un nuovo progetto di Ionic 7](#frontespizio)<br>
+[Creazione di un nuovo progetto di Ionic 7](#1)<br>
 Principali Componenti Ionic 7<br>
 Styling e personalizzazione<br>
 Routing e navigazione<br>
@@ -42,5 +42,6 @@ Compilazione per ios<br>
 Compilazione per android<br>
 
 
+#1
 
 
