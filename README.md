@@ -1,7 +1,7 @@
 # ionic-academy
 
-Modulo 1:
-Creazione di un nuovo progetto di Ionic 7
+Modulo 1: 
+[Creazione di un nuovo progetto di Ionic 7](#frontespizio)
 Principali Componenti Ionic 7
 Styling e personalizzazione
 Routing e navigazione
