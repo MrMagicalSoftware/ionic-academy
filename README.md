@@ -41,6 +41,8 @@ Progetto finale<br>
 Compilazione per ios<br>
 Compilazione per android<br>
 
+_____________________________________
+
 
 ### 1
 # Creazione di un nuovo progetto di Ionic 7
