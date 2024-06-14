@@ -42,6 +42,8 @@ Compilazione per ios<br>
 Compilazione per android<br>
 
 
-# 1 creaz
+### 1
+# Creazione di un nuovo progetto di Ionic 7
+
 
 
