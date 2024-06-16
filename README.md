@@ -1621,9 +1621,256 @@ In sintesi, leggere e scrivere JSON in un'applicazione Ionic 7 con Angular è un
 
 
 
+____________________________________
 
 
 
+
+# Apis (Background Runner, Browser, Device, Camera) & Esempio di uso Apis Geolocation
+
+
+
+### Utilizzo delle API in Ionic 7: Background Runner, Browser, Device, Camera, Geolocation
+
+Ionic 7 offre un'ampia gamma di plugin che facilitano l'interazione con le funzionalità native del dispositivo. Di seguito esploreremo come utilizzare alcune di queste API, con un esempio dettagliato sull'uso della Geolocation.
+
+### Background Runner
+
+Il plugin Background Runner permette di eseguire codice in background anche quando l'app è chiusa. Utilizza il plugin Cordova `cordova-plugin-background-mode`.
+
+1. **Installazione del Plugin**
+
+   ```sh
+   ionic cordova plugin add cordova-plugin-background-mode
+   npm install @awesome-cordova-plugins/background-mode
+   ```
+
+2. **Utilizzo del Plugin**
+
+   Nel file del componente:
+
+   ```typescript
+   import { Component } from '@angular/core';
+   import { BackgroundMode } from '@awesome-cordova-plugins/background-mode/ngx';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: 'home.page.html',
+     styleUrls: ['home.page.scss'],
+   })
+   export class HomePage {
+
+     constructor(private backgroundMode: BackgroundMode) { }
+
+     enableBackgroundMode() {
+       this.backgroundMode.enable();
+       this.backgroundMode.on('activate').subscribe(() => {
+         console.log('Background mode activated');
+       });
+     }
+   }
+   ```
+
+### Browser
+
+Il plugin Browser permette di aprire URL esterni all'interno di un browser in-app.
+
+1. **Installazione del Plugin**
+
+   ```sh
+   ionic cordova plugin add cordova-plugin-inappbrowser
+   npm install @awesome-cordova-plugins/in-app-browser
+   ```
+
+2. **Utilizzo del Plugin**
+
+   Nel file del componente:
+
+   ```typescript
+   import { Component } from '@angular/core';
+   import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: 'home.page.html',
+     styleUrls: ['home.page.scss'],
+   })
+   export class HomePage {
+
+     constructor(private iab: InAppBrowser) { }
+
+     openBrowser() {
+       const browser = this.iab.create('https://ionicframework.com/', '_system');
+     }
+   }
+   ```
+
+### Device
+
+Il plugin Device fornisce informazioni sul dispositivo come il modello, il sistema operativo, ecc.
+
+1. **Installazione del Plugin**
+
+   ```sh
+   ionic cordova plugin add cordova-plugin-device
+   npm install @awesome-cordova-plugins/device
+   ```
+
+2. **Utilizzo del Plugin**
+
+   Nel file del componente:
+
+   ```typescript
+   import { Component, OnInit } from '@angular/core';
+   import { Device } from '@awesome-cordova-plugins/device/ngx';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: 'home.page.html',
+     styleUrls: ['home.page.scss'],
+   })
+   export class HomePage implements OnInit {
+
+     deviceInfo: any;
+
+     constructor(private device: Device) { }
+
+     ngOnInit() {
+       this.deviceInfo = {
+         model: this.device.model,
+         platform: this.device.platform,
+         version: this.device.version,
+         manufacturer: this.device.manufacturer,
+         isVirtual: this.device.isVirtual,
+         serial: this.device.serial
+       };
+     }
+   }
+   ```
+
+### Camera
+
+Il plugin Camera permette di scattare foto utilizzando la fotocamera del dispositivo.
+
+1. **Installazione del Plugin**
+
+   ```sh
+   ionic cordova plugin add cordova-plugin-camera
+   npm install @awesome-cordova-plugins/camera
+   ```
+
+2. **Utilizzo del Plugin**
+
+   Nel file del componente:
+
+   ```typescript
+   import { Component } from '@angular/core';
+   import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: 'home.page.html',
+     styleUrls: ['home.page.scss'],
+   })
+   export class HomePage {
+
+     capturedImage: string;
+
+     constructor(private camera: Camera) { }
+
+     takePicture() {
+       const options: CameraOptions = {
+         quality: 100,
+         destinationType: this.camera.DestinationType.DATA_URL,
+         encodingType: this.camera.EncodingType.JPEG,
+         mediaType: this.camera.MediaType.PICTURE
+       };
+
+       this.camera.getPicture(options).then((imageData) => {
+         this.capturedImage = 'data:image/jpeg;base64,' + imageData;
+       }, (err) => {
+         console.log('Error: ', err);
+       });
+     }
+   }
+   ```
+
+### Geolocation
+
+Il plugin Geolocation permette di ottenere la posizione corrente del dispositivo.
+
+1. **Installazione del Plugin**
+
+   ```sh
+   ionic cordova plugin add cordova-plugin-geolocation
+   npm install @awesome-cordova-plugins/geolocation
+   ```
+
+2. **Utilizzo del Plugin**
+
+   Nel file del componente:
+
+   ```typescript
+   import { Component, OnInit } from '@angular/core';
+   import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: 'home.page.html',
+     styleUrls: ['home.page.scss'],
+   })
+   export class HomePage implements OnInit {
+
+     latitude: number;
+     longitude: number;
+
+     constructor(private geolocation: Geolocation) { }
+
+     ngOnInit() {
+       this.geolocation.getCurrentPosition().then((resp) => {
+         this.latitude = resp.coords.latitude;
+         this.longitude = resp.coords.longitude;
+       }).catch((error) => {
+         console.log('Error getting location', error);
+       });
+     }
+
+     watchPosition() {
+       const watch = this.geolocation.watchPosition();
+       watch.subscribe((data) => {
+         this.latitude = data.coords.latitude;
+         this.longitude = data.coords.longitude;
+       });
+     }
+   }
+   ```
+
+   **Template HTML**:
+
+   ```html
+   <ion-header>
+     <ion-toolbar>
+       <ion-title>Home</ion-title>
+     </ion-toolbar>
+   </ion-header>
+
+   <ion-content>
+     <ion-card>
+       <ion-card-header>
+         <ion-card-title>Geolocation</ion-card-title>
+       </ion-card-header>
+       <ion-card-content>
+         <p>Latitude: {{ latitude }}</p>
+         <p>Longitude: {{ longitude }}</p>
+         <ion-button (click)="watchPosition()">Watch Position</ion-button>
+       </ion-card-content>
+     </ion-card>
+   </ion-content>
+   ```
+
+### Conclusione
+
+Ionic 7, combinato con Angular e Cordova, fornisce potenti strumenti per accedere alle funzionalità native dei dispositivi. Utilizzando plugin come quelli mostrati, puoi integrare facilmente funzionalità come esecuzione in background, apertura di URL, informazioni sul dispositivo, fotocamera e geolocalizzazione nella tua applicazione.
 
 
 
