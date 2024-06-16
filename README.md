@@ -433,7 +433,6 @@ export class AppModule {}
 </ion-content>
 ```
 
-Integrando uno o più di questi framework UI, puoi migliorare notevolmente l'interfaccia utente e l'esperienza utente della tua applicazione Ionic 7 con Angular.
 
 
 
