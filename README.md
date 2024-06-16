@@ -14,7 +14,8 @@ Apis (Background Runner, Browser, Device, Camera)<br>
 Esempio di uso Apis Geolocation<br>
 Ulteriori Apis Capacitor (Preferences, Push Notifications, Network)<br>
 Componenti avanzate<br>
-Creazione di app con uso dei sensori.<br>
+
+Creazione di app con uso dei sensori.<br> **
 Rilevazione del dispositivo web, android, iOS<br>
 Introduzione a ionic capacitor<br>
 Ionic Life Cycles<br><br>
@@ -2050,8 +2051,350 @@ L'API Network di Capacitor permette di monitorare lo stato della rete e rilevare
    ```
 
 
+_______________________________
+
+# Componenti Avanzate in Ionic 7
 
 
+Utilizzando queste componenti avanzate di Ionic 7, è possibile creare applicazioni altamente interattive e user-friendly. I componenti Modal, Popover, Slides e Tabs offrono potenti strumenti per costruire esperienze utente coinvolgenti e funzionali. Sperimenta con queste componenti per scoprire come possono migliorare la tua applicazione Ionic.
+
+
+### Componenti Avanzate in Ionic 7
+
+Ionic 7 offre una vasta gamma di componenti che possono essere utilizzati per creare interfacce utente sofisticate e interattive. Di seguito esploreremo alcune delle componenti avanzate e come possono essere utilizzate per migliorare la tua applicazione.
+
+### Modal
+
+Il componente Modal viene utilizzato per visualizzare una pagina o un contenuto sopra l'app corrente.
+
+1. **Creare una Pagina Modal**
+
+   Innanzitutto, crea una nuova pagina che verrà visualizzata come modal:
+
+   ```sh
+   ionic generate page MyModal
+   ```
+
+2. **Configurare il Modal**
+
+   Nel file del componente:
+
+   ```typescript
+   import { Component } from '@angular/core';
+   import { ModalController } from '@ionic/angular';
+   import { MyModalPage } from '../my-modal/my-modal.page';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: 'home.page.html',
+     styleUrls: ['home.page.scss'],
+   })
+   export class HomePage {
+
+     constructor(private modalController: ModalController) {}
+
+     async presentModal() {
+       const modal = await this.modalController.create({
+         component: MyModalPage
+       });
+       return await modal.present();
+     }
+   }
+   ```
+
+   **Template HTML per la Pagina Principale**:
+
+   ```html
+   <ion-header>
+     <ion-toolbar>
+       <ion-title>Home</ion-title>
+     </ion-toolbar>
+   </ion-header>
+
+   <ion-content>
+     <ion-button (click)="presentModal()">Open Modal</ion-button>
+   </ion-content>
+   ```
+
+3. **Configurare la Pagina Modal**
+
+   Nel file `my-modal.page.ts`:
+
+   ```typescript
+   import { Component } from '@angular/core';
+   import { ModalController } from '@ionic/angular';
+
+   @Component({
+     selector: 'app-my-modal',
+     templateUrl: './my-modal.page.html',
+     styleUrls: ['./my-modal.page.scss'],
+   })
+   export class MyModalPage {
+
+     constructor(private modalController: ModalController) {}
+
+     dismiss() {
+       this.modalController.dismiss();
+     }
+   }
+   ```
+
+   **Template HTML per la Pagina Modal**:
+
+   ```html
+   <ion-header>
+     <ion-toolbar>
+       <ion-title>Modal</ion-title>
+       <ion-buttons slot="end">
+         <ion-button (click)="dismiss()">Close</ion-button>
+       </ion-buttons>
+     </ion-toolbar>
+   </ion-header>
+
+   <ion-content>
+     <p>This is a modal!</p>
+   </ion-content>
+   ```
+
+### Popover
+
+Il componente Popover viene utilizzato per visualizzare un piccolo overlay sopra la pagina corrente, di solito per mostrare ulteriori opzioni o informazioni.
+
+1. **Creare una Pagina Popover**
+
+   ```sh
+   ionic generate page MyPopover
+   ```
+
+2. **Configurare il Popover**
+
+   Nel file del componente:
+
+   ```typescript
+   import { Component } from '@angular/core';
+   import { PopoverController } from '@ionic/angular';
+   import { MyPopoverPage } from '../my-popover/my-popover.page';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: 'home.page.html',
+     styleUrls: ['home.page.scss'],
+   })
+   export class HomePage {
+
+     constructor(private popoverController: PopoverController) {}
+
+     async presentPopover(ev: any) {
+       const popover = await this.popoverController.create({
+         component: MyPopoverPage,
+         event: ev,
+         translucent: true
+       });
+       return await popover.present();
+     }
+   }
+   ```
+
+   **Template HTML per la Pagina Principale**:
+
+   ```html
+   <ion-header>
+     <ion-toolbar>
+       <ion-title>Home</ion-title>
+     </ion-toolbar>
+   </ion-header>
+
+   <ion-content>
+     <ion-button (click)="presentPopover($event)">Open Popover</ion-button>
+   </ion-content>
+   ```
+
+3. **Configurare la Pagina Popover**
+
+   Nel file `my-popover.page.ts`:
+
+   ```typescript
+   import { Component } from '@angular/core';
+
+   @Component({
+     selector: 'app-my-popover',
+     templateUrl: './my-popover.page.html',
+     styleUrls: ['./my-popover.page.scss'],
+   })
+   export class MyPopoverPage {}
+   ```
+
+   **Template HTML per la Pagina Popover**:
+
+   ```html
+   <ion-content>
+     <ion-list>
+       <ion-item button>Option 1</ion-item>
+       <ion-item button>Option 2</ion-item>
+       <ion-item button>Option 3</ion-item>
+     </ion-list>
+   </ion-content>
+   ```
+
+### Slides
+
+Il componente Slides viene utilizzato per creare caroselli o presentazioni di diapositive.
+
+1. **Aggiungere il Componente Slides nel Template**
+
+   **Template HTML**:
+
+   ```html
+   <ion-header>
+     <ion-toolbar>
+       <ion-title>Slides</ion-title>
+     </ion-toolbar>
+   </ion-header>
+
+   <ion-content>
+     <ion-slides pager="true">
+       <ion-slide>
+         <h1>Slide 1</h1>
+       </ion-slide>
+       <ion-slide>
+         <h1>Slide 2</h1>
+       </ion-slide>
+       <ion-slide>
+         <h1>Slide 3</h1>
+       </ion-slide>
+     </ion-slides>
+   </ion-content>
+   ```
+
+2. **Configurare il Componente Slides nel Controller**
+
+   ```typescript
+   import { Component, ViewChild } from '@angular/core';
+   import { IonSlides } from '@ionic/angular';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: 'home.page.html',
+     styleUrls: ['home.page.scss'],
+   })
+   export class HomePage {
+     @ViewChild(IonSlides) slides: IonSlides;
+
+     slideOpts = {
+       initialSlide: 0,
+       speed: 400
+     };
+
+     constructor() {}
+
+     nextSlide() {
+       this.slides.slideNext();
+     }
+
+     prevSlide() {
+       this.slides.slidePrev();
+     }
+   }
+   ```
+
+   **Template HTML con Controlli per le Slide**:
+
+   ```html
+   <ion-header>
+     <ion-toolbar>
+       <ion-title>Slides</ion-title>
+     </ion-toolbar>
+   </ion-header>
+
+   <ion-content>
+     <ion-slides [options]="slideOpts" pager="true">
+       <ion-slide>
+         <h1>Slide 1</h1>
+       </ion-slide>
+       <ion-slide>
+         <h1>Slide 2</h1>
+       </ion-slide>
+       <ion-slide>
+         <h1>Slide 3</h1>
+       </ion-slide>
+     </ion-slides>
+     <ion-button (click)="prevSlide()">Previous</ion-button>
+     <ion-button (click)="nextSlide()">Next</ion-button>
+   </ion-content>
+   ```
+
+### Tabs
+
+Il componente Tabs viene utilizzato per creare un'interfaccia a schede.
+
+1. **Generare una Pagina con Tabs**
+
+   ```sh
+   ionic generate page Tabs
+   ```
+
+2. **Configurare il Componente Tabs**
+
+   **Template HTML per la Pagina Tabs**:
+
+   ```html
+   <ion-tabs>
+     <ion-tab-bar slot="bottom">
+       <ion-tab-button tab="tab1">
+         <ion-icon name="home"></ion-icon>
+         <ion-label>Home</ion-label>
+       </ion-tab-button>
+       <ion-tab-button tab="tab2">
+         <ion-icon name="information-circle"></ion-icon>
+         <ion-label>About</ion-label>
+       </ion-tab-button>
+       <ion-tab-button tab="tab3">
+         <ion-icon name="contacts"></ion-icon>
+         <ion-label>Contact</ion-label>
+       </ion-tab-button>
+     </ion-tab-bar>
+   </ion-tabs>
+   ```
+
+   **Router Module per la Pagina Tabs**:
+
+   ```typescript
+   import { NgModule } from '@angular/core';
+   import { RouterModule, Routes } from '@angular/router';
+   import { TabsPage } from './tabs.page';
+
+   const routes: Routes = [
+     {
+       path: '',
+       component: TabsPage,
+       children: [
+         {
+           path: 'tab1',
+           loadChildren: () => import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+         },
+         {
+           path: 'tab2',
+           loadChildren: () => import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+         },
+         {
+           path: 'tab3',
+           loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+         },
+         {
+           path: '',
+           redirectTo: '/tabs/tab1',
+           pathMatch: 'full'
+         }
+       ]
+     }
+   ];
+
+   @NgModule({
+     imports: [RouterModule.forChild(routes)],
+     exports: [RouterModule]
+   })
+   export class TabsPageRoutingModule {}
+   ```
 
 
 
