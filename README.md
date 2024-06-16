@@ -49,6 +49,27 @@ _____________________________________
 
 
 
+Per visionare la versione di ionic possibiamo utilizzare il comando 
+
+
+```
+ionic info
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 _________________________________________
 
