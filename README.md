@@ -1874,6 +1874,182 @@ Ionic 7, combinato con Angular e Cordova, fornisce potenti strumenti per acceder
 
 
 
+_____________________
+
+<br><br><br>
+
+
+# Ulteriori Apis Capacitor (Preferences, Push Notifications, Network)
+
+
+Capacitor offre una serie di potenti API che permettono di interagire con le funzionalità native del dispositivo, migliorando così l'esperienza utente delle tue applicazioni Ionic. Utilizzando le API Preferences, Push Notifications e Network, puoi facilmente gestire le preferenze dell'utente, inviare notifiche push e monitorare lo stato della rete nella tua applicazione. Queste integrazioni possono essere effettuate con poche righe di codice, rendendo lo sviluppo più efficiente e mantenendo il codice dell'applicazione pulito e organizzato.
+
+
+### Utilizzo delle API di Capacitor in Ionic 7: Preferences, Push Notifications, Network
+
+Capacitor è una piattaforma open-source che ti permette di costruire applicazioni web moderne che si comportano come app native. Fornisce una vasta gamma di API per accedere alle funzionalità native del dispositivo. Di seguito esploreremo come utilizzare alcune di queste API con Ionic 7.
+
+### Preferences
+
+L'API Preferences di Capacitor consente di salvare e recuperare piccoli dati locali come le impostazioni dell'app.
+
+1. **Installazione del Plugin**
+
+   ```sh
+   npm install @capacitor/preferences
+   ```
+
+2. **Utilizzo del Plugin**
+
+   Nel file del componente:
+
+   ```typescript
+   import { Component } from '@angular/core';
+   import { Preferences } from '@capacitor/preferences';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: 'home.page.html',
+     styleUrls: ['home.page.scss'],
+   })
+   export class HomePage {
+
+     constructor() { }
+
+     async setPreference(key: string, value: string) {
+       await Preferences.set({
+         key: key,
+         value: value
+       });
+     }
+
+     async getPreference(key: string) {
+       const { value } = await Preferences.get({ key: key });
+       console.log(`Preference for ${key} is ${value}`);
+     }
+
+     async removePreference(key: string) {
+       await Preferences.remove({ key: key });
+     }
+   }
+   ```
+
+### Push Notifications
+
+L'API Push Notifications di Capacitor permette di ricevere notifiche push.
+
+1. **Installazione del Plugin**
+
+   ```sh
+   npm install @capacitor/push-notifications
+   ```
+
+2. **Configurazione e Utilizzo del Plugin**
+
+   Nel file del componente:
+
+   ```typescript
+   import { Component, OnInit } from '@angular/core';
+   import { PushNotifications, Token } from '@capacitor/push-notifications';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: 'home.page.html',
+     styleUrls: ['home.page.scss'],
+   })
+   export class HomePage implements OnInit {
+
+     constructor() { }
+
+     ngOnInit() {
+       this.registerForPushNotifications();
+     }
+
+     registerForPushNotifications() {
+       // Request permission to use push notifications
+       PushNotifications.requestPermissions().then(result => {
+         if (result.receive === 'granted') {
+           // Register with Apple / Google to receive push via APNS/FCM
+           PushNotifications.register();
+         } else {
+           // Show some error
+           console.error('Push notification permission not granted');
+         }
+       });
+
+       // On success, we should be able to receive notifications
+       PushNotifications.addListener('registration', (token: Token) => {
+         console.log('Push registration success, token: ' + token.value);
+       });
+
+       // Some issue with our setup and push will not work
+       PushNotifications.addListener('registrationError', (error: any) => {
+         console.error('Error on registration: ' + JSON.stringify(error));
+       });
+
+       // Show us the notification payload if the app is open on our device
+       PushNotifications.addListener('pushNotificationReceived', (notification: any) => {
+         console.log('Push received: ' + JSON.stringify(notification));
+       });
+
+       // Method called when tapping on a notification
+       PushNotifications.addListener('pushNotificationActionPerformed', (notification: any) => {
+         console.log('Push action performed: ' + JSON.stringify(notification));
+       });
+     }
+   }
+   ```
+
+### Network
+
+L'API Network di Capacitor permette di monitorare lo stato della rete e rilevare cambiamenti nella connettività.
+
+1. **Installazione del Plugin**
+
+   ```sh
+   npm install @capacitor/network
+   ```
+
+2. **Utilizzo del Plugin**
+
+   Nel file del componente:
+
+   ```typescript
+   import { Component, OnInit } from '@angular/core';
+   import { Network } from '@capacitor/network';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: 'home.page.html',
+     styleUrls: ['home.page.scss'],
+   })
+   export class HomePage implements OnInit {
+
+     networkStatus: string;
+
+     constructor() { }
+
+     ngOnInit() {
+       this.checkNetworkStatus();
+       this.listenForNetworkChanges();
+     }
+
+     async checkNetworkStatus() {
+       const status = await Network.getStatus();
+       this.networkStatus = status.connected ? 'Online' : 'Offline';
+       console.log('Network status:', this.networkStatus);
+     }
+
+     listenForNetworkChanges() {
+       Network.addListener('networkStatusChange', (status) => {
+         this.networkStatus = status.connected ? 'Online' : 'Offline';
+         console.log('Network status changed:', this.networkStatus);
+       });
+     }
+   }
+   ```
+
+
 
 
 
