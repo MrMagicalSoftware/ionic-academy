@@ -433,6 +433,477 @@ export class AppModule {}
 </ion-content>
 ```
 
+_____________________________________________________
+
+# Routing e navigazione
+
+
+
+Il routing e la navigazione in un'applicazione Ionic 7 con Angular sono gestiti utilizzando il router di Angular. Di seguito trovi una guida su come configurare e utilizzare il routing e la navigazione in un progetto Ionic.
+
+### Configurazione del Routing
+
+1. **Creazione del modulo di routing**:
+   Quando crei un nuovo progetto Ionic con Angular, il modulo di routing principale (`app-routing.module.ts`) viene generato automaticamente.
+
+2. **Definizione delle rotte**:
+   Definisci le rotte nel file `app-routing.module.ts`. Ecco un esempio di configurazione delle rotte:
+   ```typescript
+   import { NgModule } from '@angular/core';
+   import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+
+   const routes: Routes = [
+     {
+       path: '',
+       loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
+     },
+     {
+       path: 'details',
+       loadChildren: () => import('./details/details.module').then(m => m.DetailsPageModule)
+     },
+     // Altre rotte...
+   ];
+
+   @NgModule({
+     imports: [
+       RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+     ],
+     exports: [RouterModule]
+   })
+   export class AppRoutingModule { }
+   ```
+
+3. **Creazione dei moduli delle pagine**:
+   Utilizza il comando CLI di Ionic per generare nuove pagine. Questo comando creerà automaticamente i file necessari e aggiornerà il routing.
+   ```sh
+   ionic generate page Home
+   ionic generate page Details
+   ```
+
+### Navigazione tra le Pagine
+
+1. **Utilizzo di `RouterLink`**:
+   Puoi utilizzare il direttiva `RouterLink` per creare link di navigazione nelle tue pagine HTML.
+   ```html
+   <ion-button [routerLink]="['/details']">Go to Details</ion-button>
+   ```
+
+2. **Navigazione Programmatica**:
+   Puoi anche navigare programmaticamente utilizzando il servizio `Router` di Angular.
+   ```typescript
+   import { Component } from '@angular/core';
+   import { Router } from '@angular/router';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: './home.page.html',
+     styleUrls: ['./home.page.scss'],
+   })
+   export class HomePage {
+
+     constructor(private router: Router) { }
+
+     navigateToDetails() {
+       this.router.navigate(['/details']);
+     }
+   }
+   ```
+
+   E nel tuo template HTML:
+   ```html
+   <ion-button (click)="navigateToDetails()">Go to Details</ion-button>
+   ```
+
+### Passaggio di Dati tra le Pagine
+
+1. **Passaggio di Parametri**:
+   Puoi passare parametri nelle rotte utilizzando il `RouterLink`.
+   ```html
+   <ion-button [routerLink]="['/details', { id: 42 }]">Go to Details</ion-button>
+   ```
+
+2. **Lettura dei Parametri**:
+   Nella pagina di destinazione, utilizza il `ActivatedRoute` per leggere i parametri.
+   ```typescript
+   import { Component, OnInit } from '@angular/core';
+   import { ActivatedRoute } from '@angular/router';
+
+   @Component({
+     selector: 'app-details',
+     templateUrl: './details.page.html',
+     styleUrls: ['./details.page.scss'],
+   })
+   export class DetailsPage implements OnInit {
+
+     id: number;
+
+     constructor(private route: ActivatedRoute) { }
+
+     ngOnInit() {
+       this.id = +this.route.snapshot.paramMap.get('id');
+     }
+   }
+   ```
+
+### Guardie di Rotta
+
+Le guardie di rotta possono essere utilizzate per proteggere le rotte e controllare l'accesso.
+
+1. **Creazione di una Guardia**:
+   Utilizza il comando CLI di Angular per generare una guardia.
+   ```sh
+   ng generate guard auth
+   ```
+
+2. **Implementazione della Guardia**:
+   Implementa la logica di autenticazione o autorizzazione nella guardia.
+   ```typescript
+   import { Injectable } from '@angular/core';
+   import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+   import { Observable } from 'rxjs';
+
+   @Injectable({
+     providedIn: 'root'
+   })
+   export class AuthGuard implements CanActivate {
+
+     constructor(private router: Router) {}
+
+     canActivate(
+       next: ActivatedRouteSnapshot,
+       state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+       const isAuthenticated = // logica di autenticazione
+       if (!isAuthenticated) {
+         this.router.navigate(['/login']);
+         return false;
+       }
+       return true;
+     }
+   }
+   ```
+
+3. **Aggiunta della Guardia alla Rotta**:
+   Aggiungi la guardia alla configurazione delle rotte.
+   ```typescript
+   const routes: Routes = [
+     {
+       path: 'details',
+       loadChildren: () => import('./details/details.module').then(m => m.DetailsPageModule),
+       canActivate: [AuthGuard]
+     },
+     // Altre rotte...
+   ];
+   ```
+
+### Esempio Completo
+
+Ecco un esempio completo di configurazione del routing e navigazione in un'applicazione Ionic 7 con Angular:
+
+**`app-routing.module.ts`**:
+```typescript
+import { NgModule } from '@angular/core';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './auth.guard';
+
+const routes: Routes = [
+  {
+    path: '',
+    loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
+  },
+  {
+    path: 'details/:id',
+    loadChildren: () => import('./details/details.module').then(m => m.DetailsPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
+  },
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+```
+
+**`home.page.html`**:
+```html
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Home</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button [routerLink]="['/details', 42]">Go to Details with ID 42</ion-button>
+</ion-content>
+```
+
+**`details.page.ts`**:
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-details',
+  templateUrl: './details.page.html',
+  styleUrls: ['./details.page.scss'],
+})
+export class DetailsPage implements OnInit {
+
+  id: number;
+
+  constructor(private route: ActivatedRoute) { }
+
+  ngOnInit() {
+    this.id = +this.route.snapshot.paramMap.get('id');
+  }
+}
+```
+
+Questa configurazione fornisce una base solida per implementare un routing e una navigazione efficaci nella tua applicazione Ionic 7 con Angular.
+
+
+___________________________________
+
+
+## PASSAGGI DI PARAMETRI TRA LE PAGINE 
+
+In un'applicazione Ionic 7 con Angular, il passaggio di parametri tra le pagine (o "activity" in termini di sviluppo mobile tradizionale) viene gestito attraverso il router di Angular. Ecco come puoi passare e ricevere parametri tra le pagine.
+
+### Passaggio di Parametri tramite URL
+
+1. **Definizione delle Rotte con Parametri**:
+   Definisci le rotte nel file `app-routing.module.ts` includendo i parametri.
+   ```typescript
+   import { NgModule } from '@angular/core';
+   import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+
+   const routes: Routes = [
+     {
+       path: '',
+       loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
+     },
+     {
+       path: 'details/:id',
+       loadChildren: () => import('./details/details.module').then(m => m.DetailsPageModule)
+     },
+     // Altre rotte...
+   ];
+
+   @NgModule({
+     imports: [
+       RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+     ],
+     exports: [RouterModule]
+   })
+   export class AppRoutingModule { }
+   ```
+
+2. **Navigazione con Parametri**:
+   Utilizza `routerLink` o il servizio `Router` per navigare verso una rotta specifica con parametri.
+
+   **Con `routerLink`:**
+   ```html
+   <ion-button [routerLink]="['/details', id]">Go to Details</ion-button>
+   ```
+
+   **Programmaticamente con `Router`:**
+   ```typescript
+   import { Router } from '@angular/router';
+
+   constructor(private router: Router) {}
+
+   navigateToDetails(id: number) {
+     this.router.navigate(['/details', id]);
+   }
+   ```
+
+### Ricezione di Parametri nella Pagina di Destinazione
+
+1. **Utilizzo di `ActivatedRoute` per Ottenere i Parametri**:
+   Nella pagina di destinazione, usa `ActivatedRoute` per leggere i parametri.
+
+   ```typescript
+   import { Component, OnInit } from '@angular/core';
+   import { ActivatedRoute } from '@angular/router';
+
+   @Component({
+     selector: 'app-details',
+     templateUrl: './details.page.html',
+     styleUrls: ['./details.page.scss'],
+   })
+   export class DetailsPage implements OnInit {
+
+     id: number;
+
+     constructor(private route: ActivatedRoute) { }
+
+     ngOnInit() {
+       this.id = +this.route.snapshot.paramMap.get('id');
+     }
+   }
+   ```
+
+### Passaggio di Dati Complessi
+
+Per passare dati più complessi, puoi utilizzare il servizio `NavigationExtras` con il metodo `navigate`.
+
+1. **Navigazione con `NavigationExtras`**:
+   ```typescript
+   import { Router, NavigationExtras } from '@angular/router';
+
+   constructor(private router: Router) {}
+
+   navigateWithData() {
+     let navigationExtras: NavigationExtras = {
+       queryParams: {
+         special: JSON.stringify({ id: 42, name: 'Ionic' })
+       }
+     };
+     this.router.navigate(['/details'], navigationExtras);
+   }
+   ```
+
+2. **Ricezione dei Dati**:
+   Utilizza `ActivatedRoute` per leggere i parametri di query nella pagina di destinazione.
+
+   ```typescript
+   import { Component, OnInit } from '@angular/core';
+   import { ActivatedRoute } from '@angular/router';
+
+   @Component({
+     selector: 'app-details',
+     templateUrl: './details.page.html',
+     styleUrls: ['./details.page.scss'],
+   })
+   export class DetailsPage implements OnInit {
+
+     data: any;
+
+     constructor(private route: ActivatedRoute) { }
+
+     ngOnInit() {
+       this.route.queryParams.subscribe(params => {
+         if (params && params.special) {
+           this.data = JSON.parse(params.special);
+         }
+       });
+     }
+   }
+   ```
+
+### Esempio Completo
+
+**`app-routing.module.ts`**:
+```typescript
+import { NgModule } from '@angular/core';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+  {
+    path: '',
+    loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
+  },
+  {
+    path: 'details/:id',
+    loadChildren: () => import('./details/details.module').then(m => m.DetailsPageModule)
+  },
+  {
+    path: 'details',
+    loadChildren: () => import('./details/details.module').then(m => m.DetailsPageModule)
+  }
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+```
+
+**`home.page.html`**:
+```html
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Home</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button [routerLink]="['/details', 42]">Go to Details with ID 42</ion-button>
+  <ion-button (click)="navigateWithData()">Go to Details with Data</ion-button>
+</ion-content>
+```
+
+**`home.page.ts`**:
+```typescript
+import { Component } from '@angular/core';
+import { Router, NavigationExtras } from '@angular/router';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
+})
+export class HomePage {
+
+  constructor(private router: Router) {}
+
+  navigateWithData() {
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        special: JSON.stringify({ id: 42, name: 'Ionic' })
+      }
+    };
+    this.router.navigate(['/details'], navigationExtras);
+  }
+}
+```
+
+**`details.page.ts`**:
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-details',
+  templateUrl: './details.page.html',
+  styleUrls: ['./details.page.scss'],
+})
+export class DetailsPage implements OnInit {
+
+  id: number;
+  data: any;
+
+  constructor(private route: ActivatedRoute) { }
+
+  ngOnInit() {
+    // Per ottenere il parametro ID
+    this.id = +this.route.snapshot.paramMap.get('id');
+
+    // Per ottenere i parametri di query
+    this.route.queryParams.subscribe(params => {
+      if (params && params.special) {
+        this.data = JSON.parse(params.special);
+      }
+    });
+  }
+}
+```
+
+In questo modo, puoi passare e ricevere parametri tra le pagine nella tua applicazione Ionic 7 con Angular, sia attraverso URL semplici che con dati più complessi utilizzando `NavigationExtras`.
+
+
+
+
+
 
 
 
