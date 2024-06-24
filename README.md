@@ -2906,6 +2906,238 @@ Ionic Capacitor offre una soluzione flessibile e potente per sviluppare applicaz
 
 
 
+__________________________________________
+
+
+<br><br><br>
+
+
+# MODULO 2
+
+
+
+# Principali design pattern
+
+
+Nel contesto dello sviluppo con Angular e Ionic 7, l'uso di design pattern può migliorare significativamente la qualità del codice, rendendolo più manutenibile, riutilizzabile e testabile. Ecco alcuni dei principali design pattern che possono essere applicati:
+
+### 1. **Model-View-Controller (MVC) / Model-View-ViewModel (MVVM)**
+
+**MVC** è un pattern di architettura software che separa la logica dell'applicazione in tre componenti principali: Model, View e Controller.
+
+- **Model**: Gestisce i dati dell'applicazione.
+- **View**: Rappresenta l'interfaccia utente.
+- **Controller**: Interagisce con Model e View per controllare il flusso dell'applicazione.
+
+**MVVM** è simile, ma introduce il ViewModel per gestire la logica di presentazione:
+
+- **Model**: Gestisce i dati dell'applicazione.
+- **View**: Interfaccia utente.
+- **ViewModel**: Gestisce la logica di presentazione e interagisce con il Model per fornire dati alla View.
+
+In Angular, i servizi possono essere considerati come il Model, i componenti come il Controller/ViewModel e i template HTML come la View.
+
+### 2. **Dependency Injection (DI)**
+
+Angular utilizza largamente il pattern Dependency Injection, che facilita l'inserimento delle dipendenze nelle classi (come componenti e servizi) piuttosto che crearle internamente. Questo rende il codice più modulare e testabile.
+
+```typescript
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DataService {
+  constructor(private http: HttpClient) { }
+
+  fetchData() {
+    return this.http.get('https://api.example.com/data');
+  }
+}
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
+})
+export class HomePage {
+  constructor(private dataService: DataService) {
+    this.dataService.fetchData().subscribe(data => console.log(data));
+  }
+}
+```
+
+### 3. **Observer Pattern**
+
+Utilizzato per la gestione degli eventi asincroni e la reattività, l'Observer Pattern è implementato tramite RxJS in Angular. Questo pattern è utile per la gestione di flussi di dati come eventi di interfaccia utente o chiamate HTTP.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { DataService } from './data.service';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
+})
+export class HomePage implements OnInit {
+  data$: Observable<any>;
+
+  constructor(private dataService: DataService) {}
+
+  ngOnInit() {
+    this.data$ = this.dataService.fetchData();
+  }
+}
+```
+
+### 4. **Facade Pattern**
+
+Il Facade Pattern fornisce un'interfaccia semplificata a un gruppo complesso di classi o a un sottosistema, nascondendo la complessità delle interazioni tra le classi interne.
+
+```typescript
+import { Injectable } from '@angular/core';
+import { DataService } from './data.service';
+import { AuthService } from './auth.service';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class FacadeService {
+  constructor(private dataService: DataService, private authService: AuthService) {}
+
+  getData(): Observable<any> {
+    return this.dataService.fetchData();
+  }
+
+  isAuthenticated(): boolean {
+    return this.authService.isLoggedIn();
+  }
+}
+```
+
+### 5. **Singleton Pattern**
+
+Il Singleton Pattern garantisce che una classe abbia una sola istanza e fornisce un punto di accesso globale a essa. In Angular, i servizi sono per default dei singleton quando forniti nel root injector.
+
+```typescript
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SingletonService {
+  private data: any;
+
+  constructor() {
+    this.data = {};
+  }
+
+  setData(key: string, value: any) {
+    this.data[key] = value;
+  }
+
+  getData(key: string) {
+    return this.data[key];
+  }
+}
+```
+
+### 6. **Command Pattern**
+
+Il Command Pattern incapsula una richiesta come un oggetto, permettendo di parametrare i clienti con richieste diverse, accodare o loggare richieste, e supportare operazioni reversibili.
+
+```typescript
+export interface Command {
+  execute(): void;
+}
+
+export class SaveCommand implements Command {
+  constructor(private receiver: Receiver) {}
+
+  execute() {
+    this.receiver.save();
+  }
+}
+
+export class Receiver {
+  save() {
+    console.log('Saving data...');
+  }
+}
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
+})
+export class HomePage {
+  constructor() {
+    const receiver = new Receiver();
+    const saveCommand = new SaveCommand(receiver);
+    saveCommand.execute();
+  }
+}
+```
+
+### 7. **State Pattern**
+
+Il State Pattern consente a un oggetto di cambiare il proprio comportamento quando cambia il suo stato interno. Può essere utilizzato in Angular per gestire gli stati delle componenti.
+
+```typescript
+interface State {
+  handle(context: Context): void;
+}
+
+class ConcreteStateA implements State {
+  handle(context: Context): void {
+    console.log('State A');
+    context.setState(new ConcreteStateB());
+  }
+}
+
+class ConcreteStateB implements State {
+  handle(context: Context): void {
+    console.log('State B');
+    context.setState(new ConcreteStateA());
+  }
+}
+
+class Context {
+  private state: State;
+
+  constructor(state: State) {
+    this.setState(state);
+  }
+
+  setState(state: State) {
+    this.state = state;
+  }
+
+  request() {
+    this.state.handle(this);
+  }
+}
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
+})
+export class HomePage {
+  constructor() {
+    const context = new Context(new ConcreteStateA());
+    context.request();
+    context.request();
+  }
+}
+```
+
+
+
+
 
 
 
