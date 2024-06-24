@@ -2606,6 +2606,10 @@ _____________
 
 Ionic Capacitor è una soluzione moderna per lo sviluppo di applicazioni web che possono essere distribuite come app native su iOS, Android, e anche come Progressive Web App (PWA). Capacitor è stato sviluppato da Ionic Framework e funge da strato di interoperabilità tra il codice JavaScript/TypeScript e le API native del dispositivo.
 
+
+Una Progressive Web App (PWA) è un'applicazione Web che utilizza le tecnologie più recenti per fornire un'esperienza utente simile a quella di un'applicazione nativa su dispositivi mobili. Le PWA sono progettate per essere affidabili, veloci e coinvolgenti, offrendo funzionalità come accesso offline, notifiche push e aggiornamenti in background. Le PWA possono essere installate direttamente sul dispositivo dell'utente e possono essere utilizzate senza la necessità di scaricare e installare un'applicazione tramite un'app store. Questo permette alle PWA di offrire un'esperienza simile a quella delle app native, migliorando l'engagement degli utenti e aumentando le conversioni.
+
+
 ### Vantaggi di Capacitor
 
 1. **Compatibilità con le API Web**: Capacitor consente di utilizzare API web moderne e standard per costruire applicazioni che funzionano ovunque.
