@@ -3135,6 +3135,85 @@ export class HomePage {
 }
 ```
 
+___________
+
+
+
+GESTIONE DEGLI HOOKS
+
+
+In Ionic 7, oltre agli hook standard di Angular, ci sono diversi hook specifici di Ionic che si riferiscono al ciclo di vita delle pagine. Ecco un elenco completo degli hook del ciclo di vita che puoi utilizzare nelle tue applicazioni Ionic 7:
+
+### Hook di Angular
+
+1. **ngOnChanges**: Chiamato quando una proprietà di input di un componente cambia.
+2. **ngOnInit**: Chiamato una volta, subito dopo la prima visualizzazione dei dati legati al componente.
+3. **ngDoCheck**: Chiamato a ogni ciclo di rilevamento delle modifiche.
+4. **ngAfterContentInit**: Chiamato una volta dopo l'inizializzazione del contenuto del componente.
+5. **ngAfterContentChecked**: Chiamato dopo ogni controllo del contenuto del componente.
+6. **ngAfterViewInit**: Chiamato una volta dopo l'inizializzazione delle visualizzazioni del componente.
+7. **ngAfterViewChecked**: Chiamato dopo ogni controllo delle visualizzazioni del componente.
+8. **ngOnDestroy**: Chiamato subito prima che il componente venga distrutto.
+
+### Hook del ciclo di vita di Ionic
+
+1. **ionViewWillEnter**: Chiamato quando la pagina sta per entrare nella vista.
+2. **ionViewDidEnter**: Chiamato quando la pagina è entrata nella vista.
+3. **ionViewWillLeave**: Chiamato quando la pagina sta per lasciare la vista.
+4. **ionViewDidLeave**: Chiamato quando la pagina ha lasciato la vista.
+5. **ionViewWillUnload**: Chiamato quando la pagina sta per essere distrutta e rimossa dalla memoria.
+
+### Utilizzo degli Hook di Ionic
+
+Ecco un esempio di come utilizzare questi hook in un componente di una pagina di Ionic 7:
+
+```typescript
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+@Component({
+  selector: 'app-my-page',
+  templateUrl: './my-page.component.html',
+  styleUrls: ['./my-page.component.scss'],
+})
+export class MyPageComponent implements OnInit, OnDestroy {
+
+  constructor() { }
+
+  ngOnInit(): void {
+    console.log('ngOnInit: Component initialized');
+  }
+
+  ionViewWillEnter(): void {
+    console.log('ionViewWillEnter: Page about to enter and become active');
+  }
+
+  ionViewDidEnter(): void {
+    console.log('ionViewDidEnter: Page has entered and is now active');
+  }
+
+  ionViewWillLeave(): void {
+    console.log('ionViewWillLeave: Page about to leave and no longer be active');
+  }
+
+  ionViewDidLeave(): void {
+    console.log('ionViewDidLeave: Page has left and is no longer active');
+  }
+
+  ionViewWillUnload(): void {
+    console.log('ionViewWillUnload: Page about to be destroyed and removed');
+  }
+
+  ngOnDestroy(): void {
+    console.log('ngOnDestroy: Component about to be destroyed');
+  }
+
+}
+```
+
+
+
+
+__________________
 
 
 
