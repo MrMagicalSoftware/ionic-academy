@@ -2594,6 +2594,133 @@ export class ExamplePage implements OnInit, OnDestroy {
 }
 ```
 
+<br><br><br><br>
+
+
+
+_____________
+
+# Introduzione a IONIC CAPACITOR
+
+### Introduzione a Ionic Capacitor
+
+Ionic Capacitor è una soluzione moderna per lo sviluppo di applicazioni web che possono essere distribuite come app native su iOS, Android, e anche come Progressive Web App (PWA). Capacitor è stato sviluppato da Ionic Framework e funge da strato di interoperabilità tra il codice JavaScript/TypeScript e le API native del dispositivo.
+
+### Vantaggi di Capacitor
+
+1. **Compatibilità con le API Web**: Capacitor consente di utilizzare API web moderne e standard per costruire applicazioni che funzionano ovunque.
+2. **Accesso alle API Native**: Attraverso i plugin di Capacitor, è possibile accedere a funzionalità native come fotocamera, geolocalizzazione, file system e altro.
+3. **Portabilità**: Le applicazioni costruite con Capacitor possono essere distribuite su iOS, Android e come PWA con un unico codice base.
+4. **Modernità e Aggiornamenti**: Capacitor è stato progettato con un approccio moderno, sfruttando tecnologie come Webpack e TypeScript, ed è continuamente aggiornato per supportare le ultime innovazioni web e mobile.
+
+### Architettura di Capacitor
+
+Capacitor utilizza un'architettura modulare che include:
+- **Core**: Fornisce la base di Capacitor e include funzionalità di gestione delle app e accesso alle API native.
+- **Plugins**: Moduli separati che forniscono accesso a specifiche funzionalità native. Capacitor include una serie di plugin ufficiali, e supporta anche plugin di terze parti e personalizzati.
+- **CLI**: Strumento da linea di comando che consente di creare, eseguire e costruire progetti Capacitor.
+
+### Iniziare con Capacitor
+
+#### Installazione
+
+Per iniziare con Capacitor, devi avere Node.js e npm (o yarn) installati. Segui questi passaggi per creare un nuovo progetto con Ionic e Capacitor:
+
+1. **Crea un nuovo progetto Ionic:**
+
+   ```bash
+   npm install -g @ionic/cli
+   ionic start myApp blank --type=angular
+   cd myApp
+   ```
+
+2. **Aggiungi Capacitor al progetto:**
+
+   ```bash
+   npm install @capacitor/core @capacitor/cli
+   npx cap init [appName] [appId]
+   ```
+
+   Esempio:
+
+   ```bash
+   npx cap init myApp com.myapp.example
+   ```
+
+3. **Aggiungi le piattaforme (Android/iOS):**
+
+   ```bash
+   npx cap add android
+   npx cap add ios
+   ```
+
+4. **Sincronizza il progetto:**
+
+   ```bash
+   npx cap sync
+   ```
+
+#### Esempio di utilizzo dei Plugin
+
+Un esempio di come utilizzare un plugin Capacitor, ad esempio il plugin Camera, per accedere alla fotocamera del dispositivo:
+
+1. **Installa il plugin Camera:**
+
+   ```bash
+   npm install @capacitor/camera
+   ```
+
+2. **Importa e utilizza il plugin Camera nel tuo codice:**
+
+   ```typescript
+   import { Component } from '@angular/core';
+   import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: 'home.page.html',
+     styleUrls: ['home.page.scss'],
+   })
+   export class HomePage {
+
+     constructor() {}
+
+     async takePicture() {
+       const image = await Camera.getPhoto({
+         quality: 90,
+         allowEditing: false,
+         resultType: CameraResultType.Base64,
+         source: CameraSource.Camera
+       });
+
+       const imageUrl = 'data:image/jpeg;base64,' + image.base64String;
+       // Fai qualcosa con l'immagine, come mostrarla nell'interfaccia utente
+     }
+   }
+   ```
+
+3. **Esegui il progetto su un dispositivo/emulatore:**
+
+   Per Android:
+   ```bash
+   npx cap open android
+   ```
+
+   Per iOS:
+   ```bash
+   npx cap open ios
+   ```
+
+### Pubblicazione delle App
+
+Dopo aver sviluppato e testato l'app, puoi utilizzare Capacitor per creare i pacchetti da pubblicare sugli store:
+
+- **Android**: Genera un file APK o AAB usando Android Studio e segui il processo di pubblicazione su Google Play Store.
+- **iOS**: Utilizza Xcode per generare il file IPA e pubblicare l'app su App Store.
+
+### Conclusione
+
+Ionic Capacitor offre una soluzione flessibile e potente per sviluppare applicazioni web moderne con accesso a funzionalità native, semplificando il processo di distribuzione su più piattaforme. Con Capacitor, puoi sfruttare al massimo le tecnologie web, mantenendo la possibilità di accedere alle API native quando necessario.
 
 
 
