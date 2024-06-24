@@ -47,7 +47,7 @@ Compilazione per android<br>
 Link utili :
 
 https://flowbite.com/docs/customize/rtl/
-
+https://ionicframework.com/docs/developing/previewing  Cmd+Opt+M on Mac.
 _____________________________________
 
 
