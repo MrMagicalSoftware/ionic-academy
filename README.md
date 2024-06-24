@@ -15,7 +15,7 @@ Esempio di uso Apis Geolocation<br>
 Ulteriori Apis Capacitor (Preferences, Push Notifications, Network)<br>
 Componenti avanzate<br>
 
-Creazione di app con uso dei sensori.<br> **
+Creazione di app con uso dei sensori.<br> 
 Rilevazione del dispositivo web, android, iOS<br>
 Introduzione a ionic capacitor<br>
 Ionic Life Cycles<br><br>
