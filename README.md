@@ -2399,7 +2399,185 @@ Il componente Tabs viene utilizzato per creare un'interfaccia a schede.
 __________________________________________
 
 
+# Creazione di app con uso dei sensori.
 
+
+Creare un'app con Ionic Capacitor che utilizza i sensori del dispositivo (come accelerometro, giroscopio, GPS, ecc.) è abbastanza diretto grazie ai plugin Capacitor. In questa guida, vedremo come creare un'app che utilizza il sensore GPS e l'accelerometro.
+
+### Prerequisiti
+
+Assicurati di avere Node.js e npm installati e di avere l'ultimo Ionic CLI.
+
+```bash
+npm install -g @ionic/cli
+```
+
+### Creazione del Progetto
+
+1. **Crea un nuovo progetto Ionic:**
+
+   ```bash
+   ionic start sensorApp blank --type=angular
+   cd sensorApp
+   ```
+
+2. **Aggiungi Capacitor al progetto:**
+
+   ```bash
+   npm install @capacitor/core @capacitor/cli
+   npx cap init sensorApp com.example.sensorapp
+   ```
+
+3. **Aggiungi le piattaforme (Android e iOS):**
+
+   ```bash
+   npx cap add android
+   npx cap add ios
+   ```
+
+### Utilizzo del GPS (Geolocation)
+
+Per utilizzare il GPS, useremo il plugin `@capacitor/geolocation`.
+
+1. **Installa il plugin Geolocation:**
+
+   ```bash
+   npm install @capacitor/geolocation
+   ```
+
+2. **Aggiorna il progetto Capacitor:**
+
+   ```bash
+   npx cap sync
+   ```
+
+3. **Utilizza il plugin Geolocation nel tuo codice:**
+
+   Modifica il file `home.page.ts` per includere il codice che ottiene la posizione corrente del dispositivo.
+
+   ```typescript
+   import { Component, OnInit } from '@angular/core';
+   import { Geolocation } from '@capacitor/geolocation';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: 'home.page.html',
+     styleUrls: ['home.page.scss'],
+   })
+   export class HomePage implements OnInit {
+
+     latitude: number;
+     longitude: number;
+
+     constructor() {}
+
+     ngOnInit() {
+       this.getCurrentPosition();
+     }
+
+     async getCurrentPosition() {
+       const coordinates = await Geolocation.getCurrentPosition();
+       this.latitude = coordinates.coords.latitude;
+       this.longitude = coordinates.coords.longitude;
+     }
+   }
+   ```
+
+4. **Aggiungi i permessi per iOS e Android:**
+
+   - **iOS**: Apri `ios/App/App/Info.plist` e aggiungi le chiavi necessarie per la localizzazione:
+     ```xml
+     <key>NSLocationWhenInUseUsageDescription</key>
+     <string>We need your location to show your position on the map</string>
+     ```
+
+   - **Android**: Apri `android/app/src/main/AndroidManifest.xml` e aggiungi i permessi per la localizzazione:
+     ```xml
+     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+     ```
+
+### Utilizzo dell'Accelerometro
+
+Per utilizzare l'accelerometro, possiamo usare il plugin `@capacitor/device-motion`.
+
+1. **Installa il plugin Device Motion:**
+
+   ```bash
+   npm install @capacitor/device-motion
+   ```
+
+2. **Aggiorna il progetto Capacitor:**
+
+   ```bash
+   npx cap sync
+   ```
+
+3. **Utilizza il plugin Device Motion nel tuo codice:**
+
+   Modifica `home.page.ts` per includere il codice che monitora i cambiamenti dell'accelerometro.
+
+   ```typescript
+   import { Component, OnInit } from '@angular/core';
+   import { DeviceMotion, DeviceMotionAccelerationData } from '@capacitor/device-motion';
+
+   @Component({
+     selector: 'app-home',
+     templateUrl: 'home.page.html',
+     styleUrls: ['home.page.scss'],
+   })
+   export class HomePage implements OnInit {
+
+     x: number;
+     y: number;
+     z: number;
+
+     constructor() {}
+
+     ngOnInit() {
+       this.watchAcceleration();
+     }
+
+     watchAcceleration() {
+       DeviceMotion.watchAcceleration({ frequency: 1000 }).subscribe((acceleration: DeviceMotionAccelerationData) => {
+         this.x = acceleration.x;
+         this.y = acceleration.y;
+         this.z = acceleration.z;
+       });
+     }
+   }
+   ```
+
+### Esegui l'app su un Dispositivo
+
+Per testare queste funzionalità, devi eseguire l'app su un dispositivo fisico o su un emulatore con sensori attivi.
+
+- **Per Android:**
+
+  ```bash
+  npx cap open android
+  ```
+
+  Quindi, usa Android Studio per eseguire l'app sul dispositivo o sull'emulatore.
+
+- **Per iOS:**
+
+  ```bash
+  npx cap open ios
+  ```
+
+  Quindi, usa Xcode per eseguire l'app sul dispositivo o sull'emulatore.
+
+### Conclusione
+
+Utilizzando Ionic Capacitor, puoi facilmente accedere ai sensori del dispositivo e integrarli nella tua applicazione. Con i plugin Capacitor, hai accesso a un'ampia gamma di funzionalità native, rendendo la tua app più potente e versatile.
+
+
+
+
+
+
+
+________________________________________
 
 # Rilevazione del dispositivo web, android, iOS
 
