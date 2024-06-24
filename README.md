@@ -42,6 +42,12 @@ Progetto finale<br>
 Compilazione per ios<br>
 Compilazione per android<br>
 
+
+
+Link utili :
+
+https://flowbite.com/docs/customize/rtl/
+
 _____________________________________
 
 
