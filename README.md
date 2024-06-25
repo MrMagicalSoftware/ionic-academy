@@ -521,6 +521,21 @@ Il routing e la navigazione in un'applicazione Ionic 7 con Angular sono gestiti 
    <ion-button (click)="navigateToDetails()">Go to Details</ion-button>
    ```
 
+
+IONIC BACK BUTTON
+```
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>setting</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+```
+
+
 ### Passaggio di Dati tra le Pagine
 
 1. **Passaggio di Parametri**:
