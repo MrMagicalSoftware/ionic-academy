@@ -3824,11 +3824,11 @@ Migrare da Cordova a Capacitor offre numerosi vantaggi, tra cui una migliore int
 
 
 
-$${\color{red}   LINK MIGRAZIONE   CORDOVA TO CAPACITOR :}$$ 	
+$${\color{red} CORDOVA TO CAPACITOR }$$ 	
 
 
-https://capacitorjs.com/cordova
-https://capacitorjs.com/docs/cordova/migrating-from-cordova-to-capacitor
+https://capacitorjs.com/cordova <br><br>
+https://capacitorjs.com/docs/cordova/migrating-from-cordova-to-capacitor<br><br>
 
 
 
