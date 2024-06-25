@@ -46,7 +46,7 @@ Compilazione per android<br>
 
 Link utili :
 
-https://flowbite.com/docs/customize/rtl/
+https://flowbite.com/docs/customize/rtl/ <br><br>
 https://ionicframework.com/docs/developing/previewing  Cmd+Opt+M on Mac.
 _____________________________________
 
@@ -3272,11 +3272,412 @@ __________________
 - **Esperienza di Sviluppo**: Se preferisci una migliore esperienza di sviluppo e un setup più moderno.
 
 
-
+<br><br><br>
 _____________________________________________________________________
 
 
 
+# Creazione di plugin personalizzati per estendere le funzionalità dell’applicazione.
+
+
+Creare un plugin personalizzato per Capacitor permette di estendere le funzionalità della tua applicazione utilizzando codice nativo. Capacitor supporta plugin personalizzati per iOS, Android e web. In questa guida, vedremo come creare un plugin personalizzato per tutte e tre le piattaforme.
+
+### Passaggi per Creare un Plugin Personalizzato
+
+#### 1. Creare un Progetto Plugin
+
+Innanzitutto, crea un nuovo progetto per il plugin:
+
+```bash
+npx @capacitor/cli plugin:generate
+```
+
+Questo comando avvierà una serie di prompt per configurare il plugin. Rispondi alle domande per configurare il nome, l'ID, la descrizione e altre informazioni del plugin.
+
+#### 2. Struttura del Progetto
+
+Dopo aver creato il progetto, la struttura del plugin sarà simile a questa:
+
+```
+my-plugin/
+│
+├── ios/
+│   ├── Plugin/
+│   │   └── MyPlugin.swift
+│   └── Podspec
+│
+├── android/
+│   └── src/main/java/com/example/myplugin/MyPlugin.java
+│
+├── src/
+│   └── index.ts
+│
+├── package.json
+├── README.md
+└── ... (altri file di configurazione)
+```
+
+### Implementazione del Plugin
+
+#### 3. Implementazione su iOS
+
+Apri `ios/Plugin/MyPlugin.swift` e implementa la logica del tuo plugin. Ecco un esempio di un metodo semplice che restituisce una stringa:
+
+```swift
+import Capacitor
+
+@objc(MyPlugin)
+public class MyPlugin: CAPPlugin {
+    @objc func echo(_ call: CAPPluginCall) {
+        let value = call.getString("value") ?? ""
+        call.resolve([
+            "value": value
+        ])
+    }
+}
+```
+
+#### 4. Implementazione su Android
+
+Apri `android/src/main/java/com/example/myplugin/MyPlugin.java` e implementa la logica del plugin:
+
+```java
+package com.example.myplugin;
+
+import android.util.Log;
+
+import com.getcapacitor.Plugin;
+import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.PluginCall;
+import com.getcapacitor.JSObject;
+
+@CapacitorPlugin(name = "MyPlugin")
+public class MyPlugin extends Plugin {
+
+    @PluginMethod
+    public void echo(PluginCall call) {
+        String value = call.getString("value");
+        JSObject ret = new JSObject();
+        ret.put("value", value);
+        call.resolve(ret);
+    }
+}
+```
+
+#### 5. Implementazione per il Web
+
+Apri `src/index.ts` e implementa la logica per il web:
+
+```typescript
+import { WebPlugin } from '@capacitor/core';
+
+export class MyPluginWeb extends WebPlugin {
+  async echo(options: { value: string }): Promise<{ value: string }> {
+    return options;
+  }
+}
+
+const MyPlugin = new MyPluginWeb();
+export { MyPlugin };
+```
+
+### Configurazione e Costruzione del Plugin
+
+#### 6. Aggiornamento del `package.json`
+
+Assicurati che il `package.json` del plugin contenga le informazioni corrette. Aggiungi le dipendenze necessarie per Capacitor:
+
+```json
+{
+  "name": "my-plugin",
+  "version": "0.0.1",
+  "description": "A Capacitor plugin example",
+  "main": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@capacitor/core": "^4.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.0"
+  }
+}
+```
+
+#### 7. Compilazione del Plugin
+
+Compila il plugin eseguendo:
+
+```bash
+npm run build
+```
+
+#### 8. Test del Plugin nell'Applicazione
+
+Per testare il plugin nella tua applicazione, collega il plugin alla tua app:
+
+```bash
+npm install ../path-to-my-plugin
+npx cap sync
+```
+
+### Utilizzo del Plugin nell'Applicazione
+
+Ecco come puoi usare il plugin personalizzato nella tua applicazione Ionic/Angular:
+
+#### 9. Aggiunta del Codice di Utilizzo
+
+Apri un componente Angular (ad esempio `home.page.ts`) e utilizza il plugin:
+
+```typescript
+import { Component } from '@angular/core';
+import { Plugins } from '@capacitor/core';
+const { MyPlugin } = Plugins;
+
+@Component({
+  selector: 'app-home',
+  templateUrl: 'home.page.html',
+  styleUrls: ['home.page.scss'],
+})
+export class HomePage {
+  constructor() {
+    this.echoValue();
+  }
+
+  async echoValue() {
+    const result = await MyPlugin.echo({ value: 'Hello from Capacitor' });
+    console.log(result.value);
+  }
+}
+```
+
+### Conclusione
+
+Creare un plugin personalizzato per Capacitor permette di estendere le funzionalità della tua applicazione sfruttando il codice nativo per Android, iOS e web. Seguendo questi passaggi, puoi creare, configurare e utilizzare plugin personalizzati nel tuo progetto Ionic/Capacitor, aggiungendo nuove capacità e migliorando l'interazione con le funzionalità native del dispositivo.
+
+
+
+
+### ESEMPIO ULTERIORE 
+
+
+
+Certo, vediamo un altro esempio. Questa volta creiamo un plugin personalizzato che accede alla batteria del dispositivo e restituisce lo stato della batteria, inclusa la percentuale di carica e se il dispositivo è in carica.
+
+### Creazione del Plugin Personalizzato
+
+#### 1. Creazione del Progetto Plugin
+
+Come prima, creiamo un nuovo progetto plugin:
+
+```bash
+npx @capacitor/cli plugin:generate
+```
+
+Rispondi ai prompt:
+
+- Plugin name: `BatteryStatus`
+- Plugin id: `battery-status`
+- Description: `A plugin to get battery status`
+
+#### 2. Struttura del Progetto
+
+La struttura del plugin sarà simile a quella precedente. Ora implementeremo la logica per accedere alla batteria su Android, iOS e Web.
+
+### Implementazione del Plugin
+
+#### 3. Implementazione su iOS
+
+Apri `ios/Plugin/BatteryStatus.swift` e implementa la logica per ottenere lo stato della batteria:
+
+```swift
+import Capacitor
+import UIKit
+
+@objc(BatteryStatus)
+public class BatteryStatus: CAPPlugin {
+    @objc func getBatteryStatus(_ call: CAPPluginCall) {
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        
+        let batteryLevel = UIDevice.current.batteryLevel * 100
+        let isCharging = UIDevice.current.batteryState == .charging || UIDevice.current.batteryState == .full
+        
+        call.resolve([
+            "level": batteryLevel,
+            "isCharging": isCharging
+        ])
+    }
+}
+```
+
+#### 4. Implementazione su Android
+
+Apri `android/src/main/java/com/example/batterystatus/BatteryStatus.java` e implementa la logica per ottenere lo stato della batteria:
+
+```java
+package com.example.batterystatus;
+
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
+
+import com.getcapacitor.Plugin;
+import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.PluginCall;
+import com.getcapacitor.JSObject;
+
+@CapacitorPlugin(name = "BatteryStatus")
+public class BatteryStatus extends Plugin {
+
+    @PluginMethod
+    public void getBatteryStatus(PluginCall call) {
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = getContext().registerReceiver(null, ifilter);
+        
+        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+        float batteryPct = level / (float) scale * 100;
+
+        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL;
+
+        JSObject ret = new JSObject();
+        ret.put("level", batteryPct);
+        ret.put("isCharging", isCharging);
+        call.resolve(ret);
+    }
+}
+```
+
+#### 5. Implementazione per il Web
+
+Apri `src/index.ts` e implementa la logica per ottenere lo stato della batteria nel web:
+
+```typescript
+import { WebPlugin } from '@capacitor/core';
+
+export class BatteryStatusWeb extends WebPlugin {
+  async getBatteryStatus(): Promise<{ level: number, isCharging: boolean }> {
+    const battery = await (navigator as any).getBattery();
+    return {
+      level: battery.level * 100,
+      isCharging: battery.charging
+    };
+  }
+}
+
+const BatteryStatus = new BatteryStatusWeb();
+export { BatteryStatus };
+```
+
+### Configurazione e Costruzione del Plugin
+
+#### 6. Aggiornamento del `package.json`
+
+Assicurati che il `package.json` del plugin contenga le informazioni corrette:
+
+```json
+{
+  "name": "battery-status",
+  "version": "0.0.1",
+  "description": "A Capacitor plugin to get battery status",
+  "main": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@capacitor/core": "^4.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.0"
+  }
+}
+```
+
+#### 7. Compilazione del Plugin
+
+Compila il plugin eseguendo:
+
+```bash
+npm run build
+```
+
+#### 8. Test del Plugin nell'Applicazione
+
+Per testare il plugin nella tua applicazione, collega il plugin alla tua app:
+
+```bash
+npm install ../path-to-battery-status
+npx cap sync
+```
+
+### Utilizzo del Plugin nell'Applicazione
+
+Ecco come puoi usare il plugin personalizzato nella tua applicazione Ionic/Angular:
+
+#### 9. Aggiunta del Codice di Utilizzo
+
+Apri un componente Angular (ad esempio `home.page.ts`) e utilizza il plugin:
+
+```typescript
+import { Component } from '@angular/core';
+import { Plugins } from '@capacitor/core';
+const { BatteryStatus } = Plugins;
+
+@Component({
+  selector: 'app-home',
+  templateUrl: 'home.page.html',
+  styleUrls: ['home.page.scss'],
+})
+export class HomePage {
+  batteryLevel: number;
+  isCharging: boolean;
+
+  constructor() {
+    this.getBatteryStatus();
+  }
+
+  async getBatteryStatus() {
+    try {
+      const status = await BatteryStatus.getBatteryStatus();
+      this.batteryLevel = status.level;
+      this.isCharging = status.isCharging;
+    } catch (error) {
+      console.error('Error getting battery status:', error);
+    }
+  }
+}
+```
+
+### Conclusione
+
+Questo esempio mostra come creare un plugin personalizzato per Capacitor per ottenere lo stato della batteria del dispositivo su iOS, Android e web. Seguendo questi passaggi, puoi creare e utilizzare plugin personalizzati per estendere le funzionalità della tua applicazione, sfruttando al meglio le capacità native dei dispositivi.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+___________________________________________________________________
+
+
+
+<br><br><br>
 
 #  Migrazione di plugin da Cordova a capacitor
 
