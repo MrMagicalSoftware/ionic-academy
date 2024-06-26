@@ -1,0 +1,82 @@
+
+importare il modulo in module.ts
+import { HttpClientModule } from '@angular/common/http';
+
+
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Blank
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Blank</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="container">
+    <strong>Ready to create an app?</strong>
+    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <ion-button [routerLink]="['/info']">Go to Info Page</ion-button>
+
+
+    <ion-button (click)="getFoxImage()">Get Random Fox Image</ion-button>
+    <div *ngIf="imageUrl">
+      <ion-img
+      [src]="imageUrl"
+        alt="The Wisconsin State Capitol building in Madison, WI at night"
+      ></ion-img>
+    </div>
+
+
+  </div>
+</ion-content>
+
+
+________________________________________________________________________
+
+typescript
+
+import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+@Component({
+  selector: 'app-home',
+  templateUrl: 'home.page.html',
+  styleUrls: ['home.page.scss'],
+})
+export class HomePage {
+
+
+  imageUrl: string | undefined;
+
+  constructor(private http: HttpClient) {}
+
+
+  getFoxImage() {
+    this.http.get<{ image: string }>('https://randomfox.ca/floof/')
+      .subscribe(response => {
+        this.imageUrl = response.image;
+      });
+  }
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
