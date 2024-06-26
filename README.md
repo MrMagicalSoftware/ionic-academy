@@ -340,6 +340,11 @@ importare i file di css:
 @import '~primeflex/primeflex.css';
 @import '~primeflex/themes/primeone-light.css';
 
+Per primeng
+
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
 
 
 
