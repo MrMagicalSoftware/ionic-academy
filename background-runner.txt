@@ -1,0 +1,117 @@
+Background Runner
+
+Add Capacitor to your project:
+1) ionic init capacitor
+
+2)Install Capacitor plugins:
+npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/ios
+
+3)Then, initialize Capacitor:
+
+npx cap init
+npx cap add android
+npx cap add ios
+
+4) Install the BackgroundTask plugin for Capacitor:
+npm install @capacitor-community/background-task
+
+
+5 ) Synchronize the new plugins with your native projects:
+npx cap sync
+
+IMPORTARE HttpClientModule NEL FILE DI MODULE
+
+
+import { Component } from '@angular/core';
+import { Platform } from '@ionic/angular';
+import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
+import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
+import { Plugins } from '@capacitor/core';
+import { BackgroundTask } from '@capacitor-community/background-task';
+import { DataService } from './services/data.service';
+
+const { BackgroundTask: BackgroundTaskPlugin } = Plugins;
+
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html'
+})
+export class AppComponent {
+  constructor(
+    private platform: Platform,
+    private statusBar: StatusBar,
+    private splashScreen: SplashScreen,
+    private dataService: DataService
+  ) {
+    this.initializeApp();
+  }
+
+  initializeApp() {
+    this.platform.ready().then(() => {
+      this.statusBar.styleDefault();
+      this.splashScreen.hide();
+
+      // Start background task
+      this.startBackgroundTask();
+    });
+  }
+
+  startBackgroundTask() {
+    BackgroundTaskPlugin.beforeExit(async () => {
+      this.runBackgroundTask();
+    });
+
+    setInterval(() => {
+      this.runBackgroundTask();
+    }, 60000); // Run the task every 60 seconds
+  }
+
+  async runBackgroundTask() {
+    const taskId = BackgroundTaskPlugin.beforeExit(async () => {
+      // Perform some work here
+      console.log('Background task running');
+      await this.fetchDataFromServer();
+
+      BackgroundTaskPlugin.finish({ taskId });
+    });
+  }
+
+  async fetchDataFromServer() {
+    console.log('Fetching data from server');
+    this.dataService.fetchData().subscribe(data => {
+      console.log('Data fetched:', data);
+      // Handle the fetched data
+    }, error => {
+      console.error('Error fetching data:', error);
+    });
+  }
+}
+
+
+ Implement the HTTP Service
+
+Create a service to handle HTTP requests. Generate the service using Angular CLI:
+
+ionic generate service services/data
+
+Then, implement the HTTP requests in data.service.ts:
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DataService {
+
+  private apiUrl = 'https://your-api-endpoint.com/data';
+
+  constructor(private http: HttpClient) { }
+
+  fetchData(): Observable<any> {
+    return this.http.get(this.apiUrl);
+  }
+}
+
+
