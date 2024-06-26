@@ -331,6 +331,7 @@ PrimeNG è una collezione di componenti UI per Angular, ricca di funzionalità e
 **Installazione:**
 ```sh
 npm install primeng primeicons
+npm install primeflex
 ```
 
 **Utilizzo:**
