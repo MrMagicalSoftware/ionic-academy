@@ -334,6 +334,16 @@ npm install primeng primeicons
 npm install primeflex
 ```
 
+Per utilizzare correttamente primeflex nel file global.scss
+importare i file di css:
+
+@import '~primeflex/primeflex.css';
+@import '~primeflex/themes/primeone-light.css';
+
+
+
+
+
 **Utilizzo:**
 Importa i moduli necessari nel tuo modulo Angular:
 ```typescript
