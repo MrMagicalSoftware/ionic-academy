@@ -1,0 +1,11 @@
+# Aggiungi la piattaforma android
+ionic capacitor add android
+
+# Sincronizza le modifiche con Capacitor:
+sudo ionic capacitor sync android
+
+# Apertura di  Android Studio
+sudo ionic capacitor open android
+
+# Compila ed esegui l'app:
+sudo ionic capacitor run android
