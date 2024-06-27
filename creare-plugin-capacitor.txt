@@ -54,5 +54,5 @@ export class HomePage {
 ::::::::::::::::::::: PER PORTARE IL PLUGIN SU ANDROID :::::::::::::::::
 
 ionic cap sync android
-
+npx cap open android
 
