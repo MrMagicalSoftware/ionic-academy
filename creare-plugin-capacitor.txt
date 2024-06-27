@@ -55,4 +55,4 @@ export class HomePage {
 
 ionic cap sync android
 npx cap open android
-
+ionic cap run android
