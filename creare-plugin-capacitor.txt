@@ -30,4 +30,26 @@ Per installare il mio plugin nel progetto corrente dovrò avere :
 
 npm install ../contacs-plugin ( nome del plugin )
 
+FACCIO UN CHECK NEI NODE MODULES E NEL FILE package.json
+
+Nella classe dove voglio utilizzare uso :
+
+import 'test-capacitor'
+
+
+export class HomePage {
+  contacts = []
+
+  constructor(){
+  }
+
+  async loadContacts(){
+     this.contacts = (await Test
+  }
+
+}
+
+
+
+
 
