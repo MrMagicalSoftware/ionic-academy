@@ -1,0 +1,33 @@
+.....CREAZIONE DI CAPACITOR PLUGIN FOR IONIC........
+
+
+https://capacitorjs.com/docs/plugins/creating-plugins
+
+1) npm init @capacitor/plugin
+
+Creo nel file definitions:
+getContacts(filter:string) : Promise<{results:any[]}>; // mine
+
+Nella parte di web.ts :
+
+ async getContacts(filter: string): Promise<{ results: any[]; }> {
+      console.log('GET CONTACTS', filter);
+      return {
+        results:[
+          {
+            firstName : 'Dummy',
+            lastName : 'Dummy',
+            telehone:'2321332'
+          }
+        ]
+      };
+  }
+
+Ora posso fare il build : npm run build
+
+
+Per installare il mio plugin nel progetto corrente dovrò avere :
+
+npm install ../contacs-plugin ( nome del plugin )
+
+
