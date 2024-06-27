@@ -1,5 +1,6 @@
 .....CREAZIONE DI CAPACITOR PLUGIN FOR IONIC........
-
+https://devdactic.com/build-capacitor-plugin
+https://www.youtube.com/watch?v=MgjzFJHMNAM
 
 https://capacitorjs.com/docs/plugins/creating-plugins
 
